@@ -17,7 +17,7 @@
 package ee.ellytr.chat.component;
 
 import ee.ellytr.chat.ChatConstant;
-import ee.ellytr.chat.utils.ChatUtil;
+import ee.ellytr.chat.util.ChatUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ee.ellytr.chat.utils;
+package ee.ellytr.chat.util;
 
 import ee.ellytr.chat.component.LanguageComponent;
 import net.md_5.bungee.api.chat.BaseComponent;
