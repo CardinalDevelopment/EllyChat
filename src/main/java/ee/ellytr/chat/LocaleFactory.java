@@ -25,9 +25,6 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-/**
- * Created by Connor on 2/28/2016.
- */
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class LocaleFactory {

@@ -24,9 +24,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Connor on 2/28/2016.
- */
 @Getter
 public class LocaleRegistry {
 
