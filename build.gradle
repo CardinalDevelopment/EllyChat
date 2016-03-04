@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath 'gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.12.1'
+    }
+}
+
+configurations {
+    compile.extendsFrom shade
+}
+
+group 'ee.ellytr.chat'
+version '1.0.0'
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    mavenLocal()
+}
+
+dependencies {
+    compile 'org.projectlombok:lombok:1.16.6'
+    compile 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+}
+
+apply plugin: 'license'
+
+license {
+    header = project.file('LICENSE-HEADER')
+    include '**/*.java'
+
+    mapping {
+        java = 'SLASHSTAR_STYLE'
+    }
+}
+
