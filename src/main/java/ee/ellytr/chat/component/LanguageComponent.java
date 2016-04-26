@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat.component;
 
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -23,16 +24,18 @@ import java.util.Locale;
 
 public abstract class LanguageComponent extends BaseComponent {
 
-    public abstract BaseComponent[] getComponents(String locale);
-    public abstract List<BaseComponent> getFields();
-    public abstract void setFields(List<BaseComponent> fields);
+  public abstract BaseComponent[] getComponents(Locale locale);
 
-    @Override
-    public String toLegacyText() {
-        StringBuilder text = new StringBuilder();
-        for (BaseComponent baseComponent : getComponents(Locale.getDefault().toString())) {
-            text.append(baseComponent.toLegacyText());
-        }
-        return text.toString();
+  public abstract List<BaseComponent> getFields();
+
+  public abstract void setFields(List<BaseComponent> fields);
+
+  @Override
+  public String toLegacyText() {
+    StringBuilder text = new StringBuilder();
+    for (BaseComponent baseComponent : getComponents(Locale.getDefault())) {
+      text.append(baseComponent.toLegacyText());
     }
+    return text.toString();
+  }
 }

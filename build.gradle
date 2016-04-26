@@ -22,13 +22,12 @@ targetCompatibility = 1.8
 
 repositories {
     jcenter()
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-    mavenLocal()
+    maven { url 'https://repo.oc.tc/content/groups/public/' }
 }
 
 dependencies {
     compile 'org.projectlombok:lombok:1.16.6'
-    compile 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    compile 'tc.oc:sportbukkit-api:1.9.2-R0.1-SNAPSHOT'
 }
 
 apply plugin: 'license'

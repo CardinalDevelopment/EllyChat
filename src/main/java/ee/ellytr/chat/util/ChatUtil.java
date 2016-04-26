@@ -14,9 +14,9 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat.util;
 
-import ee.ellytr.chat.component.LanguageComponent;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
@@ -26,48 +26,34 @@ import java.util.Locale;
 
 public class ChatUtil {
 
-    public static String getLocale(CommandSender who) {
-        String locale;
-        if (who instanceof Player) {
-            locale = ((Player) who).spigot().getLocale();
-        } else {
-            locale = Locale.getDefault().toString();
-        }
-        if (locale.contains("_")) {
-            return locale.split("_")[0];
-        }
-        return locale;
+  public static Locale getLocale(CommandSender who) {
+    if (!(who instanceof Player)) {
+      return Locale.getDefault();
     }
+    String locale = ((Player) who).getLocale();
+    if (locale.contains("_")) {
+      String[] parsedLocale = locale.split("_");
+      return new Locale(parsedLocale[0], parsedLocale[1]);
+    }
+    return new Locale(locale);
+  }
 
-    public static TextComponent getTextComponent(String text, BaseComponent old) {
-        TextComponent component = new TextComponent(text);
-        component.setColor(old.getColor());
-        component.setBold(old.isBold());
-        component.setItalic(old.isItalic());
-        component.setUnderlined(old.isUnderlined());
-        component.setStrikethrough(old.isStrikethrough());
-        component.setObfuscated(old.isObfuscated());
-        component.setClickEvent(old.getClickEvent());
-        component.setHoverEvent(old.getHoverEvent());
-        if (old.getExtra() != null) {
-            for (BaseComponent extra : old.getExtra()) {
-                component.addExtra(extra.duplicate());
-            }
-        }
-        return component;
+  public static TextComponent getTextComponent(String text, BaseComponent old) {
+    TextComponent component = new TextComponent(text);
+    component.setColor(old.getColor());
+    component.setBold(old.isBold());
+    component.setItalic(old.isItalic());
+    component.setUnderlined(old.isUnderlined());
+    component.setStrikethrough(old.isStrikethrough());
+    component.setObfuscated(old.isObfuscated());
+    component.setClickEvent(old.getClickEvent());
+    component.setHoverEvent(old.getHoverEvent());
+    if (old.getExtra() != null) {
+      for (BaseComponent extra : old.getExtra()) {
+        component.addExtra(extra.duplicate());
+      }
     }
-
-    public static void sendLanguageComponent(CommandSender sender, LanguageComponent component) {
-        String locale = getLocale(sender);
-        if (sender instanceof Player) {
-            ((Player) sender).spigot().sendMessage(component.getComponents(locale));
-            return;
-        }
-        StringBuilder message = new StringBuilder();
-        for (BaseComponent baseComponent : component.getComponents(locale)) {
-            message.append(baseComponent.toLegacyText());
-        }
-        sender.sendMessage(message.toString());
-    }
+    return component;
+  }
 
 }

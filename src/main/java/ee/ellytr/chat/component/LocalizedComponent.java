@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat.component;
 
 import ee.ellytr.chat.ChatConstant;
@@ -23,96 +24,97 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class LocalizedComponent extends LanguageComponent {
 
-    private ChatConstant constant;
-    private List<BaseComponent> fields;
+  private ChatConstant constant;
+  private List<BaseComponent> fields;
 
-    public LocalizedComponent(ChatConstant constant, BaseComponent... fields) {
-        this(constant, Arrays.asList(fields));
+  public LocalizedComponent(ChatConstant constant, BaseComponent... fields) {
+    this(constant, Arrays.asList(fields));
+  }
+
+  public LocalizedComponent(ChatConstant constant, List<BaseComponent> fields) {
+    this.constant = constant;
+    this.fields = fields;
+  }
+
+  @Override
+  public BaseComponent duplicate() {
+    LocalizedComponent component = new LocalizedComponent(constant, fields);
+    component.setColor(getColor());
+    component.setBold(isBold());
+    component.setItalic(isItalic());
+    component.setUnderlined(isUnderlined());
+    component.setStrikethrough(isStrikethrough());
+    component.setObfuscated(isObfuscated());
+    component.setClickEvent(getClickEvent());
+    component.setHoverEvent(getHoverEvent());
+    if (getExtra() != null) {
+      for (BaseComponent extra : getExtra()) {
+        component.addExtra(extra.duplicate());
+      }
     }
+    return component;
+  }
 
-    public LocalizedComponent(ChatConstant constant, List<BaseComponent> fields) {
-        this.constant = constant;
-        this.fields = fields;
-    }
+  public ChatConstant getConstant() {
+    return constant;
+  }
 
-    @Override
-    public BaseComponent duplicate() {
-        LocalizedComponent component = new LocalizedComponent(constant, fields);
-        component.setColor(getColor());
-        component.setBold(isBold());
-        component.setItalic(isItalic());
-        component.setUnderlined(isUnderlined());
-        component.setStrikethrough(isStrikethrough());
-        component.setObfuscated(isObfuscated());
-        component.setClickEvent(getClickEvent());
-        component.setHoverEvent(getHoverEvent());
-        if (getExtra() != null) {
-            for (BaseComponent extra : getExtra()) {
-                component.addExtra(extra.duplicate());
-            }
+  public void setConstant(ChatConstant constant) {
+    this.constant = constant;
+  }
+
+  @Override
+  public BaseComponent[] getComponents(Locale locale) {
+    int i = 0;
+    List<BaseComponent> components = new ArrayList<>();
+    String message = constant.getMessage(locale);
+    for (BaseComponent field : fields) {
+      String[] parsed = message.split("\\{" + i + "\\}");
+      if (parsed.length > 0) {
+        String text = parsed[0];
+        message = message.substring(text.length() + 2 + (i + "").length());
+        components.add(ChatUtil.getTextComponent(text, this));
+      } else {
+        message = message.substring(2 + (i + "").length());
+      }
+      if (field instanceof LanguageComponent) {
+        for (BaseComponent component : ((LanguageComponent) field).getComponents(locale)) {
+          components.add(component);
         }
-        return component;
-    }
-
-    public ChatConstant getConstant() {
-        return constant;
-    }
-
-    public void setConstant(ChatConstant constant) {
-        this.constant = constant;
-    }
-
-    @Override
-    public BaseComponent[] getComponents(String locale) {
-        int i = 0;
-        List<BaseComponent> components = new ArrayList<>();
-        String message = constant.getMessage(locale);
-        for (BaseComponent field : fields) {
-            String[] parsed = message.split("\\{" + i + "\\}");
-            if (parsed.length > 0) {
-                String text = parsed[0];
-                message = message.substring(text.length() + 2 + (i + "").length());
-                components.add(ChatUtil.getTextComponent(text, this));
-            } else {
-                message = message.substring(2 + (i + "").length());
-            }
-            if (field instanceof LanguageComponent) {
-                for (BaseComponent component : ((LanguageComponent) field).getComponents(locale)) {
-                    components.add(component);
-                }
-            } else if (field instanceof NameComponent) {
-                for (BaseComponent component : ((NameComponent) field).getComponents(locale)) {
-                    components.add(component);
-                }
-            } else {
-                components.add(field);
-            }
-            i ++;
+      } else if (field instanceof NameComponent) {
+        for (BaseComponent component : ((NameComponent) field).getComponents(locale)) {
+          components.add(component);
         }
-        if (!message.equals("")) {
-            components.add(ChatUtil.getTextComponent(message, this));
-        }
-        BaseComponent[] componentArray = new BaseComponent[components.size()];
-        int j = 0;
-        for (Object component : components) {
-            componentArray[j] = (BaseComponent) component;
-            j ++;
-        }
-        return componentArray;
+      } else {
+        components.add(field);
+      }
+      i++;
     }
+    if (!message.equals("")) {
+      components.add(ChatUtil.getTextComponent(message, this));
+    }
+    BaseComponent[] componentArray = new BaseComponent[components.size()];
+    int j = 0;
+    for (Object component : components) {
+      componentArray[j] = (BaseComponent) component;
+      j++;
+    }
+    return componentArray;
+  }
 
-    @Override
-    public List<BaseComponent> getFields() {
-        return fields;
-    }
+  @Override
+  public List<BaseComponent> getFields() {
+    return fields;
+  }
 
-    @Override
-    public void setFields(List<BaseComponent> fields) {
-        this.fields = fields;
-    }
+  @Override
+  public void setFields(List<BaseComponent> fields) {
+    this.fields = fields;
+  }
 
 
 }

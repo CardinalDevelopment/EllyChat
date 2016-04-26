@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat;
 
 import lombok.AccessLevel;
@@ -22,6 +23,7 @@ import lombok.Getter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -29,26 +31,26 @@ import java.util.logging.Logger;
 @Getter
 public class LocaleFactory {
 
-    private LocaleRegistry registry;
+  private LocaleRegistry registry;
 
-    public void build() {
-        for (String locale : registry.getLocaleFiles().keySet()) {
-            for (InputStream stream : registry.getLocaleFiles().get(locale)) {
-                Properties properties = new Properties();
-                try {
-                    properties.load(stream);
-                } catch (IOException e) {
-                    Logger.getLogger("EllyChat").warning("Could not register file for locale \"" + locale + "\"");
-                    e.printStackTrace();
-                    continue;
-                }
-                for (String property : properties.stringPropertyNames()) {
-                    ChatConstant constant = ChatConstant.getConstant(property);
-                    constant.addMessage(locale, properties.getProperty(property));
-                }
-                properties.clear();
-            }
+  public void build() {
+    for (Locale locale : registry.getLocaleFiles().keySet()) {
+      for (InputStream stream : registry.getLocaleFiles().get(locale)) {
+        Properties properties = new Properties();
+        try {
+          properties.load(stream);
+        } catch (IOException e) {
+          Logger.getLogger("EllyChat").warning("Could not register file for locale \"" + locale + "\"");
+          e.printStackTrace();
+          continue;
         }
+        for (String property : properties.stringPropertyNames()) {
+          ChatConstant constant = ChatConstant.getConstant(property);
+          constant.addMessage(locale, properties.getProperty(property));
+        }
+        properties.clear();
+      }
     }
+  }
 
 }

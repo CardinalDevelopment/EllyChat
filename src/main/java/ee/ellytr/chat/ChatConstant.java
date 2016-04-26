@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat;
 
 import com.google.common.collect.Lists;
@@ -22,48 +23,54 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 @Getter
 public class ChatConstant {
 
-    private static List<ChatConstant> constants = Lists.newArrayList();
+  private static List<ChatConstant> constants = Lists.newArrayList();
 
-    private String path;
-    private HashMap<String, String> messages;
+  private String path;
+  private HashMap<Locale, String> messages;
 
-    protected ChatConstant(String path) {
-        this.path = path;
-        messages = Maps.newHashMap();
+  protected ChatConstant(String path) {
+    this.path = path;
+    messages = Maps.newHashMap();
 
-        constants.add(this);
+    constants.add(this);
+  }
+
+  public void addMessage(Locale locale, String message) {
+    messages.put(locale, message);
+  }
+
+  public static ChatConstant getConstant(String path) {
+    for (ChatConstant constant : constants) {
+      if (constant.getPath().equals(path)) {
+        return constant;
+      }
     }
+    return new ChatConstant(path);
+  }
 
-    public void addMessage(String locale, String message) {
-        messages.put(locale, message);
+  public String getMessage(Locale locale) {
+    if (messages.size() == 0) {
+      return null;
     }
-
-    public static ChatConstant getConstant(String path) {
-        for (ChatConstant constant : constants) {
-            if (constant.getPath().equals(path)) {
-                return constant;
-            }
-        }
-        return new ChatConstant(path);
+    for (Locale msgLocale : messages.keySet()) {
+      if (msgLocale.equals(locale)) {
+        return messages.get(msgLocale);
+      }
     }
-
-    public String getMessage(String locale) {
-        if (messages.size() < 1) {
-            return null;
-        }
-        for (String messageLocale : messages.keySet()) {
-            if (messageLocale.equals(locale)) {
-                return messages.get(messageLocale);
-            }
-        }
-        for (String messageLocale : messages.keySet()) {
-            return messages.get(messageLocale);
-        }
-        return null;
+    for (Locale msgLocale : messages.keySet()) {
+      if (msgLocale.getLanguage().equals(locale.getLanguage())) {
+        return messages.get(msgLocale);
+      }
     }
+    for (Locale msgLocale : messages.keySet()) {
+      return messages.get(msgLocale);
+    }
+    return null;
+  }
 
 }

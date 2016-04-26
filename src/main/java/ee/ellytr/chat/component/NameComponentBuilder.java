@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat.component;
 
 import net.md_5.bungee.api.ChatColor;
@@ -27,103 +28,103 @@ import java.util.List;
 
 public class NameComponentBuilder {
 
-    private ServerOperator operator;
-    private ChatColor color;
-    private boolean bold;
-    private boolean italic;
-    private boolean underlined;
-    private boolean strikethrough;
-    private boolean obfuscated;
-    private ClickEvent clickEvent;
-    private HoverEvent hoverEvent;
-    private List<BaseComponent> extra;
-    private boolean flairs;
-    private boolean hover;
+  private ServerOperator operator;
+  private ChatColor color;
+  private boolean bold;
+  private boolean italic;
+  private boolean underlined;
+  private boolean strikethrough;
+  private boolean obfuscated;
+  private ClickEvent clickEvent;
+  private HoverEvent hoverEvent;
+  private List<BaseComponent> extra;
+  private boolean flairs;
+  private boolean hover;
 
-    public NameComponentBuilder(ServerOperator operator) {
-        this.operator = operator;
-        color = null;
-        bold = false;
-        italic = false;
-        underlined = false;
-        strikethrough = false;
-        obfuscated = false;
-        clickEvent = null;
-        hoverEvent = null;
-        extra = new ArrayList<>();
-        flairs = true;
-        hover = true;
-    }
+  public NameComponentBuilder(ServerOperator operator) {
+    this.operator = operator;
+    color = null;
+    bold = false;
+    italic = false;
+    underlined = false;
+    strikethrough = false;
+    obfuscated = false;
+    clickEvent = null;
+    hoverEvent = null;
+    extra = new ArrayList<>();
+    flairs = true;
+    hover = true;
+  }
 
-    public NameComponentBuilder color(ChatColor color) {
-        this.color = color;
-        return this;
-    }
+  public NameComponentBuilder color(ChatColor color) {
+    this.color = color;
+    return this;
+  }
 
-    public NameComponentBuilder bold(boolean bold) {
-        this.bold = bold;
-        return this;
-    }
+  public NameComponentBuilder bold(boolean bold) {
+    this.bold = bold;
+    return this;
+  }
 
-    public NameComponentBuilder italic(boolean italic) {
-        this.italic = italic;
-        return this;
-    }
+  public NameComponentBuilder italic(boolean italic) {
+    this.italic = italic;
+    return this;
+  }
 
-    public NameComponentBuilder underlined(boolean underlined) {
-        this.underlined = underlined;
-        return this;
-    }
+  public NameComponentBuilder underlined(boolean underlined) {
+    this.underlined = underlined;
+    return this;
+  }
 
-    public NameComponentBuilder strikethrough(boolean strikethrough) {
-        this.strikethrough = strikethrough;
-        return this;
-    }
+  public NameComponentBuilder strikethrough(boolean strikethrough) {
+    this.strikethrough = strikethrough;
+    return this;
+  }
 
-    public NameComponentBuilder obfuscated(boolean obfuscated) {
-        this.obfuscated = obfuscated;
-        return this;
-    }
+  public NameComponentBuilder obfuscated(boolean obfuscated) {
+    this.obfuscated = obfuscated;
+    return this;
+  }
 
-    public NameComponentBuilder clickEvent(ClickEvent clickEvent) {
-        this.clickEvent = clickEvent;
-        return this;
-    }
+  public NameComponentBuilder clickEvent(ClickEvent clickEvent) {
+    this.clickEvent = clickEvent;
+    return this;
+  }
 
-    public NameComponentBuilder hoverEvent(HoverEvent hoverEvent) {
-        this.hoverEvent = hoverEvent;
-        return this;
-    }
+  public NameComponentBuilder hoverEvent(HoverEvent hoverEvent) {
+    this.hoverEvent = hoverEvent;
+    return this;
+  }
 
-    public NameComponentBuilder extra(List<BaseComponent> extra) {
-        this.extra = extra;
-        return this;
-    }
+  public NameComponentBuilder extra(List<BaseComponent> extra) {
+    this.extra = extra;
+    return this;
+  }
 
-    public NameComponentBuilder flairs(boolean flairs) {
-        this.flairs = flairs;
-        return this;
-    }
+  public NameComponentBuilder flairs(boolean flairs) {
+    this.flairs = flairs;
+    return this;
+  }
 
-    public NameComponentBuilder hover(boolean hover) {
-        this.hover = hover;
-        return this;
-    }
+  public NameComponentBuilder hover(boolean hover) {
+    this.hover = hover;
+    return this;
+  }
 
-    public NameComponent build() {
-        NameComponent component = new NameComponent(operator);
-        component.setColor(color);
-        component.setBold(bold);
-        component.setItalic(italic);
-        component.setUnderlined(underlined);
-        component.setStrikethrough(strikethrough);
-        component.setObfuscated(obfuscated);
-        component.setClickEvent(clickEvent);
-        component.setHoverEvent(hoverEvent);
-        component.setExtra(extra);
-        component.setFlairs(flairs);
-        component.setHover(hover);
-        return component;
-    }
+  public NameComponent build() {
+    NameComponent component = new NameComponent(operator);
+    component.setColor(color);
+    component.setBold(bold);
+    component.setItalic(italic);
+    component.setUnderlined(underlined);
+    component.setStrikethrough(strikethrough);
+    component.setObfuscated(obfuscated);
+    component.setClickEvent(clickEvent);
+    component.setHoverEvent(hoverEvent);
+    component.setExtra(extra);
+    component.setFlairs(flairs);
+    component.setHover(hover);
+    return component;
+  }
 
 }

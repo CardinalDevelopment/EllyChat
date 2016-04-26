@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat;
 
 import com.google.common.collect.Lists;
@@ -23,33 +24,34 @@ import lombok.Getter;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 @Getter
 public class LocaleRegistry {
 
-    private HashMap<String, List<InputStream>> localeFiles;
-    private LocaleFactory factory;
+  private HashMap<Locale, List<InputStream>> localeFiles;
+  private LocaleFactory factory;
 
-    public LocaleRegistry() {
-        localeFiles = Maps.newHashMap();
-        factory = new LocaleFactory(this);
+  public LocaleRegistry() {
+    localeFiles = Maps.newHashMap();
+    factory = new LocaleFactory(this);
 
-        addDefaultLocaleFiles();
+    addDefaultLocaleFiles();
+  }
+
+  public void addLocaleFile(Locale locale, InputStream stream) {
+    if (!localeFiles.containsKey(locale)) {
+      localeFiles.put(locale, Lists.newArrayList());
     }
+    localeFiles.get(locale).add(stream);
+  }
 
-    public void addLocaleFile(String locale, InputStream stream) {
-        if (!localeFiles.containsKey(locale)) {
-            localeFiles.put(locale, Lists.newArrayList());
-        }
-        localeFiles.get(locale).add(stream);
-    }
+  public void register() {
+    factory.build();
+  }
 
-    public void register() {
-        factory.build();
-    }
-
-    private void addDefaultLocaleFiles() {
-        addLocaleFile("en", getClass().getResourceAsStream("/lang/ellyChat/en.properties"));
-    }
+  private void addDefaultLocaleFiles() {
+    addLocaleFile(new Locale("en", "US"), getClass().getResourceAsStream("/lang/ellyChat/en.properties"));
+  }
 
 }
