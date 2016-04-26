@@ -15,34 +15,41 @@
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ee.ellytr.chat.component;
+package ee.ellytr.chat.component.formattable;
 
 import ee.ellytr.chat.ChatConstant;
+import ee.ellytr.chat.component.FormattableLanguageComponent;
+import ee.ellytr.chat.component.LanguageComponent;
+import ee.ellytr.chat.component.NameComponent;
 import ee.ellytr.chat.util.ChatUtil;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class LocalizedComponent extends LanguageComponent {
+@Getter
+@Setter
+public class LocalizedComponent extends FormattableLanguageComponent {
 
   private ChatConstant constant;
-  private List<BaseComponent> fields;
 
   public LocalizedComponent(ChatConstant constant, BaseComponent... fields) {
     this(constant, Arrays.asList(fields));
   }
 
   public LocalizedComponent(ChatConstant constant, List<BaseComponent> fields) {
+    super(fields);
     this.constant = constant;
-    this.fields = fields;
   }
 
   @Override
   public BaseComponent duplicate() {
-    LocalizedComponent component = new LocalizedComponent(constant, fields);
+    LocalizedComponent component = new LocalizedComponent(constant, getFields());
     component.setColor(getColor());
     component.setBold(isBold());
     component.setItalic(isItalic());
@@ -59,20 +66,12 @@ public class LocalizedComponent extends LanguageComponent {
     return component;
   }
 
-  public ChatConstant getConstant() {
-    return constant;
-  }
-
-  public void setConstant(ChatConstant constant) {
-    this.constant = constant;
-  }
-
   @Override
   public BaseComponent[] getComponents(Locale locale) {
     int i = 0;
     List<BaseComponent> components = new ArrayList<>();
     String message = constant.getMessage(locale);
-    for (BaseComponent field : fields) {
+    for (BaseComponent field : getFields()) {
       String[] parsed = message.split("\\{" + i + "\\}");
       if (parsed.length > 0) {
         String text = parsed[0];
@@ -82,13 +81,7 @@ public class LocalizedComponent extends LanguageComponent {
         message = message.substring(2 + (i + "").length());
       }
       if (field instanceof LanguageComponent) {
-        for (BaseComponent component : ((LanguageComponent) field).getComponents(locale)) {
-          components.add(component);
-        }
-      } else if (field instanceof NameComponent) {
-        for (BaseComponent component : ((NameComponent) field).getComponents(locale)) {
-          components.add(component);
-        }
+        Collections.addAll(components, ((LanguageComponent) field).getComponents(locale));
       } else {
         components.add(field);
       }
@@ -105,16 +98,5 @@ public class LocalizedComponent extends LanguageComponent {
     }
     return componentArray;
   }
-
-  @Override
-  public List<BaseComponent> getFields() {
-    return fields;
-  }
-
-  @Override
-  public void setFields(List<BaseComponent> fields) {
-    this.fields = fields;
-  }
-
 
 }

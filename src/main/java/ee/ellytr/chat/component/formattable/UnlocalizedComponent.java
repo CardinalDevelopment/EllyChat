@@ -15,33 +15,40 @@
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ee.ellytr.chat.component;
+package ee.ellytr.chat.component.formattable;
 
+import ee.ellytr.chat.component.FormattableLanguageComponent;
+import ee.ellytr.chat.component.LanguageComponent;
+import ee.ellytr.chat.component.NameComponent;
 import ee.ellytr.chat.util.ChatUtil;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class UnlocalizedComponent extends LanguageComponent {
+@Getter
+@Setter
+public class UnlocalizedComponent extends FormattableLanguageComponent {
 
   private String text;
-  private List<BaseComponent> fields;
 
   public UnlocalizedComponent(String text, BaseComponent... fields) {
     this(text, Arrays.asList(fields));
   }
 
   public UnlocalizedComponent(String text, List<BaseComponent> fields) {
+    super(fields);
     this.text = text;
-    this.fields = fields;
   }
 
   @Override
   public BaseComponent duplicate() {
-    UnlocalizedComponent component = new UnlocalizedComponent(text, fields);
+    UnlocalizedComponent component = new UnlocalizedComponent(text, getFields());
     component.setColor(getColor());
     component.setBold(isBold());
     component.setItalic(isItalic());
@@ -58,20 +65,12 @@ public class UnlocalizedComponent extends LanguageComponent {
     return component;
   }
 
-  public String getText() {
-    return text;
-  }
-
-  public void setText(String text) {
-    this.text = text;
-  }
-
   @Override
   public BaseComponent[] getComponents(Locale locale) {
     int i = 0;
     List<BaseComponent> components = new ArrayList<>();
     String message = text;
-    for (BaseComponent field : fields) {
+    for (BaseComponent field : getFields()) {
       String[] parsed = message.split("\\{" + i + "\\}");
       if (parsed.length > 0) {
         String text = parsed[0];
@@ -81,13 +80,7 @@ public class UnlocalizedComponent extends LanguageComponent {
         message = message.substring(2 + (i + "").length());
       }
       if (field instanceof LanguageComponent) {
-        for (BaseComponent component : ((LanguageComponent) field).getComponents(locale)) {
-          components.add(component);
-        }
-      } else if (field instanceof NameComponent) {
-        for (BaseComponent component : ((NameComponent) field).getComponents(locale)) {
-          components.add(component);
-        }
+        Collections.addAll(components, ((LanguageComponent) field).getComponents(locale));
       } else {
         components.add(field);
       }
@@ -103,16 +96,6 @@ public class UnlocalizedComponent extends LanguageComponent {
       j++;
     }
     return componentArray;
-  }
-
-  @Override
-  public List<BaseComponent> getFields() {
-    return fields;
-  }
-
-  @Override
-  public void setFields(List<BaseComponent> fields) {
-    this.fields = fields;
   }
 
 }

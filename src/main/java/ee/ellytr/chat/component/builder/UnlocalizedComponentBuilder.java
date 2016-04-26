@@ -15,9 +15,9 @@
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ee.ellytr.chat.component;
+package ee.ellytr.chat.component.builder;
 
-import ee.ellytr.chat.ChatConstant;
+import ee.ellytr.chat.component.formattable.UnlocalizedComponent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class LocalizedComponentBuilder {
+public class UnlocalizedComponentBuilder {
 
-  private ChatConstant constant;
+  private String text;
   private List<BaseComponent> fields;
   private ChatColor color;
   private boolean bold;
@@ -41,12 +41,12 @@ public class LocalizedComponentBuilder {
   private HoverEvent hoverEvent;
   private List<BaseComponent> extra;
 
-  public LocalizedComponentBuilder(ChatConstant constant, BaseComponent... fields) {
-    this(constant, Arrays.asList(fields));
+  public UnlocalizedComponentBuilder(String text, BaseComponent... fields) {
+    this(text, Arrays.asList(fields));
   }
 
-  public LocalizedComponentBuilder(ChatConstant constant, List<BaseComponent> fields) {
-    this.constant = constant;
+  public UnlocalizedComponentBuilder(String text, List<BaseComponent> fields) {
+    this.text = text;
     this.fields = fields;
     color = ChatColor.RESET;
     bold = false;
@@ -59,53 +59,53 @@ public class LocalizedComponentBuilder {
     extra = new ArrayList<>();
   }
 
-  public LocalizedComponentBuilder color(ChatColor color) {
+  public UnlocalizedComponentBuilder color(ChatColor color) {
     this.color = color;
     return this;
   }
 
-  public LocalizedComponentBuilder bold(boolean bold) {
+  public UnlocalizedComponentBuilder bold(boolean bold) {
     this.bold = bold;
     return this;
   }
 
-  public LocalizedComponentBuilder italic(boolean italic) {
+  public UnlocalizedComponentBuilder italic(boolean italic) {
     this.italic = italic;
     return this;
   }
 
-  public LocalizedComponentBuilder underlined(boolean underlined) {
+  public UnlocalizedComponentBuilder underlined(boolean underlined) {
     this.underlined = underlined;
     return this;
   }
 
-  public LocalizedComponentBuilder strikethrough(boolean strikethrough) {
+  public UnlocalizedComponentBuilder strikethrough(boolean strikethrough) {
     this.strikethrough = strikethrough;
     return this;
   }
 
-  public LocalizedComponentBuilder obfuscated(boolean obfuscated) {
+  public UnlocalizedComponentBuilder obfuscated(boolean obfuscated) {
     this.obfuscated = obfuscated;
     return this;
   }
 
-  public LocalizedComponentBuilder clickEvent(ClickEvent clickEvent) {
+  public UnlocalizedComponentBuilder clickEvent(ClickEvent clickEvent) {
     this.clickEvent = clickEvent;
     return this;
   }
 
-  public LocalizedComponentBuilder hoverEvent(HoverEvent hoverEvent) {
+  public UnlocalizedComponentBuilder hoverEvent(HoverEvent hoverEvent) {
     this.hoverEvent = hoverEvent;
     return this;
   }
 
-  public LocalizedComponentBuilder extra(List<BaseComponent> extra) {
+  public UnlocalizedComponentBuilder extra(List<BaseComponent> extra) {
     this.extra = extra;
     return this;
   }
 
-  public LocalizedComponent build() {
-    LocalizedComponent component = new LocalizedComponent(constant, fields);
+  public UnlocalizedComponent build() {
+    UnlocalizedComponent component = new UnlocalizedComponent(text, fields);
     component.setColor(color);
     component.setBold(bold);
     component.setItalic(italic);

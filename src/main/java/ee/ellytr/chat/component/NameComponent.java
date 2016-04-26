@@ -18,7 +18,11 @@
 package ee.ellytr.chat.component;
 
 import ee.ellytr.chat.ChatConstant;
+import ee.ellytr.chat.component.builder.NameComponentBuilder;
+import ee.ellytr.chat.component.formattable.LocalizedComponent;
 import ee.ellytr.chat.util.ChatUtil;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -31,7 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class NameComponent extends BaseComponent {
+@Getter
+@Setter
+public class NameComponent extends LanguageComponent {
 
   private boolean flairs;
   private boolean hover;
@@ -65,14 +71,6 @@ public class NameComponent extends BaseComponent {
     return component;
   }
 
-  public ServerOperator getOperator() {
-    return operator;
-  }
-
-  public void setOperator(ServerOperator operator) {
-    this.operator = operator;
-  }
-
   public BaseComponent[] getComponents(Locale locale) {
     List<BaseComponent> components = new ArrayList<>();
     ChatColor color = getColor();
@@ -98,36 +96,13 @@ public class NameComponent extends BaseComponent {
       setColor(color == null ? ChatColor.DARK_AQUA : color);
       components.add(ChatUtil.getTextComponent("Console", this));
     }
-    setColor(color);
     if (hover && operator instanceof OfflinePlayer) {
       for (BaseComponent component : components) {
         component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new LocalizedComponent(ChatConstant.getConstant("player.teleportTo"), new NameComponentBuilder(operator).hover(false).build()).getComponents(locale)));
         component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + ((OfflinePlayer) operator).getName()));
       }
     }
-    BaseComponent[] componentArray = new BaseComponent[components.size()];
-    int j = 0;
-    for (Object component : components) {
-      componentArray[j] = (BaseComponent) component;
-      j++;
-    }
-    return componentArray;
-  }
-
-  public boolean hasHover() {
-    return hover;
-  }
-
-  public void setHover(boolean hover) {
-    this.hover = hover;
-  }
-
-  public boolean hasFlairs() {
-    return flairs;
-  }
-
-  public void setFlairs(boolean flairs) {
-    this.flairs = flairs;
+    return components.toArray(new BaseComponent[components.size()]);
   }
 
 }

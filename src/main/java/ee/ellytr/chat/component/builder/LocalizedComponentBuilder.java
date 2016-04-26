@@ -15,20 +15,23 @@
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ee.ellytr.chat.component;
+package ee.ellytr.chat.component.builder;
 
+import ee.ellytr.chat.ChatConstant;
+import ee.ellytr.chat.component.formattable.LocalizedComponent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class TranslatableComponentBuilder {
+public class LocalizedComponentBuilder {
 
-  private String path;
+  private ChatConstant constant;
+  private List<BaseComponent> fields;
   private ChatColor color;
   private boolean bold;
   private boolean italic;
@@ -39,9 +42,14 @@ public class TranslatableComponentBuilder {
   private HoverEvent hoverEvent;
   private List<BaseComponent> extra;
 
-  public TranslatableComponentBuilder(String path) {
-    this.path = path;
-    color = null;
+  public LocalizedComponentBuilder(ChatConstant constant, BaseComponent... fields) {
+    this(constant, Arrays.asList(fields));
+  }
+
+  public LocalizedComponentBuilder(ChatConstant constant, List<BaseComponent> fields) {
+    this.constant = constant;
+    this.fields = fields;
+    color = ChatColor.RESET;
     bold = false;
     italic = false;
     underlined = false;
@@ -52,53 +60,53 @@ public class TranslatableComponentBuilder {
     extra = new ArrayList<>();
   }
 
-  public TranslatableComponentBuilder color(ChatColor color) {
+  public LocalizedComponentBuilder color(ChatColor color) {
     this.color = color;
     return this;
   }
 
-  public TranslatableComponentBuilder bold(boolean bold) {
+  public LocalizedComponentBuilder bold(boolean bold) {
     this.bold = bold;
     return this;
   }
 
-  public TranslatableComponentBuilder italic(boolean italic) {
+  public LocalizedComponentBuilder italic(boolean italic) {
     this.italic = italic;
     return this;
   }
 
-  public TranslatableComponentBuilder underlined(boolean underlined) {
+  public LocalizedComponentBuilder underlined(boolean underlined) {
     this.underlined = underlined;
     return this;
   }
 
-  public TranslatableComponentBuilder strikethrough(boolean strikethrough) {
+  public LocalizedComponentBuilder strikethrough(boolean strikethrough) {
     this.strikethrough = strikethrough;
     return this;
   }
 
-  public TranslatableComponentBuilder obfuscated(boolean obfuscated) {
+  public LocalizedComponentBuilder obfuscated(boolean obfuscated) {
     this.obfuscated = obfuscated;
     return this;
   }
 
-  public TranslatableComponentBuilder clickEvent(ClickEvent clickEvent) {
+  public LocalizedComponentBuilder clickEvent(ClickEvent clickEvent) {
     this.clickEvent = clickEvent;
     return this;
   }
 
-  public TranslatableComponentBuilder hoverEvent(HoverEvent hoverEvent) {
+  public LocalizedComponentBuilder hoverEvent(HoverEvent hoverEvent) {
     this.hoverEvent = hoverEvent;
     return this;
   }
 
-  public TranslatableComponentBuilder extra(List<BaseComponent> extra) {
+  public LocalizedComponentBuilder extra(List<BaseComponent> extra) {
     this.extra = extra;
     return this;
   }
 
-  public TranslatableComponent build() {
-    TranslatableComponent component = new TranslatableComponent(path);
+  public LocalizedComponent build() {
+    LocalizedComponent component = new LocalizedComponent(constant, fields);
     component.setColor(color);
     component.setBold(bold);
     component.setItalic(italic);

@@ -14,23 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package ee.ellytr.chat.component;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
 
-import java.util.Locale;
+import java.util.List;
 
-public abstract class LanguageComponent extends BaseComponent {
+@Getter
+@Setter
+@AllArgsConstructor
+public abstract class FormattableLanguageComponent extends LanguageComponent {
 
-  public abstract BaseComponent[] getComponents(Locale locale);
-
-  @Override
-  public String toLegacyText() {
-    StringBuilder text = new StringBuilder();
-    for (BaseComponent component : getComponents(Locale.getDefault())) {
-      text.append(component.toLegacyText());
-    }
-    return text.toString();
-  }
+  private List<BaseComponent> fields;
 
 }

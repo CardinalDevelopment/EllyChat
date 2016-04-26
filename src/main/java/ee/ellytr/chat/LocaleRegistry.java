@@ -51,7 +51,7 @@ public class LocaleRegistry {
   }
 
   private void addDefaultLocaleFiles() {
-    addLocaleFile(new Locale("en", "US"), getClass().getResourceAsStream("/lang/ellyChat/en.properties"));
+    addLocaleFile(new Locale("en", "US"), getClass().getResourceAsStream("/lang/ellyChat/en_US.properties"));
   }
 
 }
