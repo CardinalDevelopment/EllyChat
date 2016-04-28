@@ -14,24 +14,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with EllyChat.  If not, see <http://www.gnu.org/licenses/>.
  */
+package ee.ellytr.chat.util.time;
 
-package ee.ellytr.chat.component;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-
-import java.util.Locale;
-
-public abstract class LanguageComponent extends BaseComponent {
-
-  public abstract BaseComponent[] getComponents(Locale locale);
-
-  @Override
-  public String toLegacyText() {
-    StringBuilder text = new StringBuilder();
-    for (BaseComponent component : getComponents(Locale.getDefault())) {
-      text.append(component.toLegacyText());
-    }
-    return text.toString();
-  }
-
+/**
+ * Specifies what format a {@link ee.ellytr.chat.component.TimeComponent} should be displayed in.
+ *
+ * The following examples are 3661 seconds, or 1 hour, 1 minute, and 1 second long:
+ * A simple format would be: 3661 seconds
+ * An expanded format would be: 1 hour, 1 minute, and 1 second
+ * A sectioned format would be: 1:01:01
+ */
+public enum TimeFormat {
+  SIMPLE, EXPANDED, SECTIONED
 }
