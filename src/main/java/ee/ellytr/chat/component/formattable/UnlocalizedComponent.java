@@ -19,7 +19,6 @@ package ee.ellytr.chat.component.formattable;
 
 import ee.ellytr.chat.component.FormattableLanguageComponent;
 import ee.ellytr.chat.component.LanguageComponent;
-import ee.ellytr.chat.component.NameComponent;
 import ee.ellytr.chat.util.ChatUtil;
 import lombok.Getter;
 import lombok.Setter;
