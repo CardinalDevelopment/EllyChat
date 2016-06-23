@@ -17,20 +17,15 @@
 
 package ee.ellytr.chat.util;
 
+import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Locale;
 
 public class ChatUtil {
 
-  public static Locale getLocale(CommandSender who) {
-    if (!(who instanceof Player)) {
-      return Locale.getDefault();
-    }
-    String locale = ((Player) who).getLocale();
+  public static Locale getLocale(@NonNull String locale) {
     if (locale.contains("_")) {
       String[] parsedLocale = locale.split("_");
       return new Locale(parsedLocale[0], parsedLocale[1]);
