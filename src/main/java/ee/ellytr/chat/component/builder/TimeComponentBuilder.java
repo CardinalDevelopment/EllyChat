@@ -30,7 +30,8 @@ import java.util.List;
 public class TimeComponentBuilder {
 
   private double time;
-  private ChatColor color;
+  private ChatColor timeColor;
+  private ChatColor formatColor;
   private boolean bold;
   private boolean italic;
   private boolean underlined;
@@ -43,7 +44,8 @@ public class TimeComponentBuilder {
 
   public TimeComponentBuilder(double time) {
     this.time = time;
-    color = null;
+    timeColor = null;
+    formatColor = null;
     bold = false;
     italic = false;
     underlined = false;
@@ -55,7 +57,18 @@ public class TimeComponentBuilder {
   }
 
   public TimeComponentBuilder color(ChatColor color) {
-    this.color = color;
+    timeColor = color;
+    formatColor = color;
+    return this;
+  }
+
+  public TimeComponentBuilder timeColor(ChatColor timeColor) {
+    this.timeColor = timeColor;
+    return this;
+  }
+
+  public TimeComponentBuilder formatColor(ChatColor formatColor) {
+    this.formatColor = formatColor;
     return this;
   }
 
@@ -106,7 +119,8 @@ public class TimeComponentBuilder {
 
   public TimeComponent build() {
     TimeComponent component = new TimeComponent(time);
-    component.setColor(color);
+    component.setTimeColor(timeColor);
+    component.setFormatColor(formatColor);
     component.setBold(bold);
     component.setItalic(italic);
     component.setUnderlined(underlined);

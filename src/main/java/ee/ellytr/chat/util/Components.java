@@ -20,7 +20,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Components {
 
-  public static <T extends BaseComponent> T copyProperties(T from, T to) {
+  public static <F extends BaseComponent, T extends BaseComponent> T copyProperties(F from, T to) {
     to.setBold(from.isBold());
     to.setClickEvent(from.getClickEvent());
     to.setColor(from.getColor());
@@ -37,7 +37,7 @@ public class Components {
   }
 
   @SafeVarargs
-  public static <T extends BaseComponent> T[] copyProperties(T from, T... to) {
+  public static <F extends BaseComponent, T extends BaseComponent> T[] copyProperties(F from, T... to) {
     for (int i = 0; i < to.length; i ++) {
       BaseComponent component = to[i];
       component.setBold(from.isBold());

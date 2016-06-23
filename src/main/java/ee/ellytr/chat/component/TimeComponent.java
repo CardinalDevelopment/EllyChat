@@ -17,42 +17,191 @@
 
 package ee.ellytr.chat.component;
 
+import ee.ellytr.chat.ChatConstant;
+import ee.ellytr.chat.component.formattable.ListComponent;
+import ee.ellytr.chat.component.formattable.LocalizedComponent;
 import ee.ellytr.chat.component.formattable.UnlocalizedComponent;
 import ee.ellytr.chat.util.Components;
-import ee.ellytr.chat.util.time.TimeContext;
+import ee.ellytr.chat.util.time.Time;
 import ee.ellytr.chat.util.time.TimeFormat;
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 @Getter
 @Setter
 public class TimeComponent extends LanguageComponent {
 
-  private double time;
+  private Time time;
   private TimeFormat format;
 
-  private TimeContext context;
+  private ChatColor timeColor;
+  private ChatColor formatColor;
 
   public TimeComponent(double time) {
-    this.time = time;
-    format = TimeFormat.SECTIONED;
+    this.time = new Time(time);
 
-    context = calculateTime(time);
-    context.updateFormat(format);
+    format = TimeFormat.SECTIONED;
   }
 
   @Override
   public BaseComponent[] getComponents(Locale locale) {
-    return Components.copyProperties(this,
-        new UnlocalizedComponent(context.getFormat(), context.getComponents()).getComponents(locale));
+    if (format.equals(TimeFormat.EXPANDED)) {
+
+      List<BaseComponent> fields = new ArrayList<>();
+
+      int weeks = time.getWeeks();
+      if (weeks != 0) {
+        UnlocalizedComponent time = Components.copyProperties(this, new UnlocalizedComponent(weeks + ""));
+        time.setColor(timeColor);
+
+        LocalizedComponent format = Components.copyProperties(this,
+            new LocalizedComponent(ChatConstant.getConstant(weeks != 1 ? "time.weeks" : "time.week"), time));
+        format.setColor(formatColor);
+
+        fields.add(format);
+      }
+
+      int days = time.getDays();
+      if (days != 0) {
+        UnlocalizedComponent time = Components.copyProperties(this, new UnlocalizedComponent(days + ""));
+        time.setColor(timeColor);
+
+        LocalizedComponent format = Components.copyProperties(this,
+            new LocalizedComponent(ChatConstant.getConstant(days != 1 ? "time.days" : "time.day"), time));
+        format.setColor(formatColor);
+
+        fields.add(format);
+      }
+
+      int hours = time.getHours();
+      if (hours != 0) {
+        UnlocalizedComponent time = Components.copyProperties(this, new UnlocalizedComponent(hours + ""));
+        time.setColor(timeColor);
+
+        LocalizedComponent format = Components.copyProperties(this,
+            new LocalizedComponent(ChatConstant.getConstant(hours != 1 ? "time.hours" : "time.hour"), time));
+        format.setColor(formatColor);
+
+        fields.add(format);
+      }
+
+      int minutes = time.getMinutes();
+      if (minutes != 0) {
+        UnlocalizedComponent time = Components.copyProperties(this, new UnlocalizedComponent(minutes + ""));
+        time.setColor(timeColor);
+
+        LocalizedComponent format = Components.copyProperties(this,
+            new LocalizedComponent(ChatConstant.getConstant(minutes != 1 ? "time.minutes" : "time.minute"), time));
+        format.setColor(formatColor);
+
+        fields.add(format);
+      }
+
+      double seconds = time.getSeconds();
+      if (seconds != 0 || fields.isEmpty()) {
+        String secondsValue = seconds + "";
+        if (secondsValue.endsWith(".0")) {
+          secondsValue = secondsValue.substring(0, secondsValue.length() - 2);
+        }
+
+        UnlocalizedComponent time = Components.copyProperties(this, new UnlocalizedComponent(secondsValue));
+        time.setColor(timeColor);
+
+        LocalizedComponent format = Components.copyProperties(this,
+            new LocalizedComponent(ChatConstant.getConstant(seconds != 1 ? "time.seconds" : "time.second"), time));
+        format.setColor(formatColor);
+
+        fields.add(format);
+      }
+
+      ListComponent component = Components.copyProperties(this, new ListComponent(fields));
+      component.setColor(formatColor);
+      return component.getComponents(locale);
+
+    } else if (format.equals(TimeFormat.SECTIONED)) {
+
+      List<BaseComponent> components = new ArrayList<>();
+
+      List<Integer> sections = new LinkedList<>(Arrays.asList(time.getWeeks(), time.getDays(), time.getHours()));
+      boolean append = false;
+      int i = 0;
+
+      StringBuilder format = new StringBuilder();
+      for (int section : sections) {
+        if (section != 0) {
+          append = true;
+        }
+        if (append) {
+          format.append("{").append(i).append("}:");
+          i++;
+
+          String sectionValue = section + "";
+          if (sectionValue.length() == 1) {
+            sectionValue = "0" + sectionValue;
+          }
+          UnlocalizedComponent sectionComponent = Components.copyProperties(this, new UnlocalizedComponent(sectionValue));
+          sectionComponent.setColor(timeColor);
+          components.add(sectionComponent);
+        }
+      }
+      format.append("{").append(i).append("}:{").append(i + 1).append("}");
+
+      String minutesValue = time.getMinutes() + "";
+      if (minutesValue.length() == 1) {
+        minutesValue = "0" + minutesValue;
+      }
+      UnlocalizedComponent minutesComponent = Components.copyProperties(this, new UnlocalizedComponent(minutesValue));
+      minutesComponent.setColor(timeColor);
+      components.add(minutesComponent);
+
+      String secondsValue = time.getSeconds() + "";
+      if (secondsValue.length() == 1) {
+        secondsValue = "0" + secondsValue;
+      }
+      if (secondsValue.endsWith(".0")) {
+        secondsValue = secondsValue.substring(0, secondsValue.length() - 2);
+      }
+      UnlocalizedComponent secondsComponent = Components.copyProperties(this, new UnlocalizedComponent(secondsValue));
+      secondsComponent.setColor(timeColor);
+      components.add(secondsComponent);
+
+      UnlocalizedComponent component = Components.copyProperties(this,
+          new UnlocalizedComponent(format.toString(), components));
+      component.setColor(formatColor);
+      return component.getComponents(locale);
+
+    } else if (format.equals(TimeFormat.SIMPLE)) {
+
+      double seconds = time.getTime();
+      String secondsValue = seconds + "";
+      if (secondsValue.endsWith(".0")) {
+        secondsValue = secondsValue.substring(0, secondsValue.length() - 2);
+      }
+
+      UnlocalizedComponent time = Components.copyProperties(this, new UnlocalizedComponent(secondsValue));
+      time.setColor(timeColor);
+
+      LocalizedComponent format = Components.copyProperties(this,
+          new LocalizedComponent(ChatConstant.getConstant(seconds != 1 ? "time.seconds" : "time.second"), time));
+      format.setColor(formatColor);
+
+      return format.getComponents(locale);
+
+    }
+    return new BaseComponent[]{};
   }
 
   @Override
   public TimeComponent duplicate() {
-    TimeComponent component = new TimeComponent(time);
+    TimeComponent component = new TimeComponent(time.getTime());
     component.setColor(getColor());
     component.setBold(isBold());
     component.setItalic(isItalic());
@@ -66,27 +215,20 @@ public class TimeComponent extends LanguageComponent {
         component.addExtra(extra.duplicate());
       }
     }
+    component.setTimeColor(getTimeColor());
+    component.setFormatColor(getFormatColor());
     return component;
   }
 
   public void setTime(double time) {
-    this.time = time;
-    context = calculateTime(time);
+    this.time.calculate(time);
   }
 
-  public void setFormat(TimeFormat format) {
-    this.format = format;
-    context.updateFormat(format);
-  }
+  @Override
+  public void setColor(ChatColor color) {
+    super.setColor(color);
 
-  private TimeContext calculateTime(double time) {
-    int flooredTime = (int) time;
-    int weeks = flooredTime / 604800; //604800 seconds are in a week
-    int days = flooredTime / 86400 - weeks * 7; //86400 seconds are in a day
-    int hours = flooredTime / 3600 - weeks * 168 - days * 24;
-    int minutes = flooredTime / 60 - weeks * 10080 - days * 1440 - hours * 60;
-    double seconds = time - weeks * 604800 - days * 86400 - hours * 3600 - minutes * 60;
-
-    return new TimeContext(time, seconds, minutes, hours, days, weeks);
+    timeColor = color;
+    formatColor = color;
   }
 }
