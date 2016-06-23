@@ -20,11 +20,13 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 public class Components {
 
-  public static BaseComponent copyProperties(BaseComponent from, BaseComponent to) {
+  public static <T extends BaseComponent> T copyProperties(T from, T to) {
     to.setBold(from.isBold());
     to.setClickEvent(from.getClickEvent());
     to.setColor(from.getColor());
-    to.setExtra(from.getExtra());
+    if (from.getExtra() != null) {
+      to.setExtra(from.getExtra());
+    }
     to.setHoverEvent(from.getHoverEvent());
     to.setInsertion(from.getInsertion());
     to.setItalic(from.isItalic());
@@ -34,13 +36,16 @@ public class Components {
     return to;
   }
 
-  public static BaseComponent[] copyProperties(BaseComponent from, BaseComponent... to) {
+  @SafeVarargs
+  public static <T extends BaseComponent> T[] copyProperties(T from, T... to) {
     for (int i = 0; i < to.length; i ++) {
       BaseComponent component = to[i];
       component.setBold(from.isBold());
       component.setClickEvent(from.getClickEvent());
       component.setColor(from.getColor());
-      component.setExtra(from.getExtra());
+      if (from.getExtra() != null) {
+        component.setExtra(from.getExtra());
+      }
       component.setHoverEvent(from.getHoverEvent());
       component.setInsertion(from.getInsertion());
       component.setItalic(from.isItalic());

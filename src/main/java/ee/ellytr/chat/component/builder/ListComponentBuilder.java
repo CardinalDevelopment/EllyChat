@@ -112,7 +112,7 @@ public class ListComponentBuilder {
     component.setObfuscated(obfuscated);
     component.setClickEvent(clickEvent);
     component.setHoverEvent(hoverEvent);
-    component.setExtra(extra);
+    //component.setExtra(extra);
     return component;
   }
 

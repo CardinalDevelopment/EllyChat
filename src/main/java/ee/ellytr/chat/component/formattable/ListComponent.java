@@ -1,28 +1,51 @@
 package ee.ellytr.chat.component.formattable;
 
+import ee.ellytr.chat.ChatConstant;
 import ee.ellytr.chat.component.FormattableLanguageComponent;
 import ee.ellytr.chat.util.Components;
-import ee.ellytr.chat.util.list.ListContext;
 import lombok.NonNull;
 import net.md_5.bungee.api.chat.BaseComponent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public class ListComponent extends FormattableLanguageComponent {
 
-  private final ListContext context;
+  public ListComponent(BaseComponent... fields) {
+    this(Arrays.asList(fields));
+  }
 
   public ListComponent(@NonNull List<BaseComponent> fields) {
     super(fields);
-
-    context = new ListContext(this);
   }
 
   @Override
   public BaseComponent[] getComponents(Locale locale) {
-    return Components.copyProperties(this, new UnlocalizedComponent(
-        context.getFormat(), context.getComponents()).getComponents(locale));
+    List<BaseComponent> fields = new ArrayList<>(getFields());
+    int size = fields.size();
+    if (size > 1) {
+      fields.add(size - 1, Components.copyProperties(this,
+          new LocalizedComponent(ChatConstant.getConstant("misc.and"))));
+    }
+
+    StringBuilder format = new StringBuilder();
+    for (int i = 0; i < size; i ++) {
+      if (i == 0) {
+        format.append("{0}");
+      } else if (i + 1 == size) {
+        if (size == 2) {
+          format.append(" {1} {2}");
+        } else {
+          format.append(", {").append(i).append("} {").append(i + 1).append("}");
+        }
+      } else {
+        format.append(", {").append(i).append("}");
+      }
+    }
+
+    return Components.copyProperties(this, new UnlocalizedComponent(format.toString(), fields)).getComponents(locale);
   }
 
   @Override
