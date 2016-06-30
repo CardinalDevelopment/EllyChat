@@ -54,6 +54,7 @@ public class TimeComponentBuilder {
     clickEvent = null;
     hoverEvent = null;
     extra = new ArrayList<>();
+    format = TimeFormat.EXPANDED;
   }
 
   public TimeComponentBuilder color(ChatColor color) {
