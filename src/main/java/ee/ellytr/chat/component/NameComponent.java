@@ -32,6 +32,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.permissions.ServerOperator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,14 +40,17 @@ import java.util.Locale;
 @Setter
 public class NameComponent extends LanguageComponent {
 
-  private boolean flairs;
-  private boolean hover;
   private ServerOperator operator;
+
+  private List<BaseComponent> flairs;
+  private boolean showFlairs;
+  private boolean hover;
 
   public NameComponent(ServerOperator operator) {
     this.operator = operator;
 
-    flairs = true;
+    flairs = new ArrayList<>();
+    showFlairs = true;
     hover = true;
   }
 
@@ -76,11 +80,14 @@ public class NameComponent extends LanguageComponent {
     ChatColor color = getColor();
     if (operator instanceof OfflinePlayer) {
       OfflinePlayer player = (OfflinePlayer) operator;
-      if (flairs) {
-        if (player.isOp()) {
-          setColor(ChatColor.GOLD);
-          components.add(ChatUtil.getTextComponent("\u2756", this));
-        }
+      if (showFlairs) {
+        for (BaseComponent flair : flairs) {
+          if (flair instanceof LanguageComponent) {
+            Collections.addAll(components, ((LanguageComponent) flair).getComponents(locale));
+          } else {
+            components.add(flair);
+          }
+        };
       }
       setColor(color == null ? (player.isOnline() ? ChatColor.WHITE : ChatColor.DARK_AQUA) : color);
       components.add(ChatUtil.getTextComponent(player.getName(), this));
@@ -89,9 +96,14 @@ public class NameComponent extends LanguageComponent {
       setColor(color == null ? ChatColor.GRAY : color);
       components.add(ChatUtil.getTextComponent(entity.getCustomName() != null ? entity.getCustomName() : entity.getName(), this));
     } else {
-      if (flairs) {
-        setColor(ChatColor.GOLD);
-        components.add(ChatUtil.getTextComponent("\u2756", this));
+      if (showFlairs) {
+        for (BaseComponent flair : flairs) {
+          if (flair instanceof LanguageComponent) {
+            Collections.addAll(components, ((LanguageComponent) flair).getComponents(locale));
+          } else {
+            components.add(flair);
+          }
+        }
       }
       setColor(color == null ? ChatColor.DARK_AQUA : color);
       components.add(ChatUtil.getTextComponent("Console", this));
