@@ -169,6 +169,9 @@ public class TimeComponent extends LanguageComponent {
       if (secondsValue.endsWith(".0")) {
         secondsValue = secondsValue.substring(0, secondsValue.length() - 2);
       }
+      if (secondsValue.length() == 1) {
+        secondsValue = "0" + secondsValue;
+      }
       UnlocalizedComponent secondsComponent = Components.copyProperties(this, new UnlocalizedComponent(secondsValue));
       secondsComponent.setColor(timeColor);
       components.add(secondsComponent);

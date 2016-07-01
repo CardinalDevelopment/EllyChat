@@ -44,10 +44,10 @@ public class NameComponent extends LanguageComponent {
   private ServerOperator operator;
 
   public NameComponent(ServerOperator operator) {
-    setColor(ChatColor.WHITE);
+    this.operator = operator;
+
     flairs = true;
     hover = true;
-    this.operator = operator;
   }
 
   @Override
