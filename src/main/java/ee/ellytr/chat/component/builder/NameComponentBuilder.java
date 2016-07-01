@@ -30,6 +30,7 @@ import java.util.List;
 public class NameComponentBuilder {
 
   private ServerOperator operator;
+
   private ChatColor color;
   private boolean bold;
   private boolean italic;
@@ -39,7 +40,8 @@ public class NameComponentBuilder {
   private ClickEvent clickEvent;
   private HoverEvent hoverEvent;
   private List<BaseComponent> extra;
-  private boolean flairs;
+  private List<BaseComponent> flairs;
+  private boolean showFlairs;
   private boolean hover;
 
   public NameComponentBuilder(ServerOperator operator) {
@@ -53,7 +55,8 @@ public class NameComponentBuilder {
     clickEvent = null;
     hoverEvent = null;
     extra = new ArrayList<>();
-    flairs = true;
+    flairs = new ArrayList<>();
+    showFlairs = true;
     hover = true;
   }
 
@@ -102,8 +105,18 @@ public class NameComponentBuilder {
     return this;
   }
 
-  public NameComponentBuilder flairs(boolean flairs) {
-    this.flairs = flairs;
+  public NameComponentBuilder flair(BaseComponent flair) {
+    flairs.add(flair);
+    return this;
+  }
+
+  public NameComponentBuilder flairs(List<BaseComponent> flairs) {
+    this.flairs.addAll(flairs);
+    return this;
+  }
+
+  public NameComponentBuilder showFlairs(boolean showFlairs) {
+    this.showFlairs = showFlairs;
     return this;
   }
 
@@ -124,6 +137,7 @@ public class NameComponentBuilder {
     component.setHoverEvent(hoverEvent);
     component.setExtra(extra);
     component.setFlairs(flairs);
+    component.setShowFlairs(showFlairs);
     component.setHover(hover);
     return component;
   }
