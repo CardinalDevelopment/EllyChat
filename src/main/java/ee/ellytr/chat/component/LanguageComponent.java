@@ -34,4 +34,13 @@ public abstract class LanguageComponent extends BaseComponent {
     return text.toString();
   }
 
+  @Override
+  public String toPlainText() {
+    StringBuilder text = new StringBuilder();
+    for (BaseComponent component : getComponents(Locale.getDefault())) {
+      text.append(component.toPlainText());
+    }
+    return text.toString();
+  }
+
 }
